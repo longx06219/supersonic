@@ -1,9 +1,13 @@
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:semantic;DATABASE_TO_UPPER=false;QUERY_TIMEOUT=30
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:semantic;DATABASE_TO_UPPER=false;QUERY_TIMEOUT=30
+#    username: root
+#    password: semantic
+    url: jdbc:mysql://wxxinsoft.gnway.org:10913/supersonic?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
     username: root
-    password: semantic
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
   sql:
     init:
       schema-locations: classpath:db/schema-h2.sql

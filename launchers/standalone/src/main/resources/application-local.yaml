@@ -4,9 +4,12 @@ spring:
 #    url: jdbc:h2:mem:semantic;DATABASE_TO_UPPER=false;QUERY_TIMEOUT=30
 #    username: root
 #    password: semantic
-    url: jdbc:mysql://wxxinsoft.gnway.org:10913/supersonic?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
-    username: root
-    password: 123456
+#    url: jdbc:mysql://wxxinsoft.gnway.org:10913/supersonic?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
+#    username: root
+#    password: 123456
+    url: jdbc:mysql://192.168.2.201:30506/supersonic?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
+    username: platformsuper
+    password: '!Sql_Pass@1!'
     driver-class-name: com.mysql.jdbc.Driver
   sql:
     init:

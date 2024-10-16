@@ -40,16 +40,10 @@ service:
 
 mount:
   volumeMounts:
-    - name: applogs
-      mountPath: /app/logs/platform-factory-project
-    - name: flow-lowcode-file
-      mountPath: /data/flow/lowcodeFile
+#    - name: applogs
+#      mountPath: /app/logs/platform-factory-project
   volumes:
-    - name: applogs
-      nfs:
-        server: 192.168.0.159
-        path: /data/k8s/factory/platform-factory-project
-    - name: flow-lowcode-file
-      nfs:
-        server: 192.168.0.159
-        path: /data/k8s/factory/data/flow/lowcodeFile
+#    - name: applogs
+#      nfs:
+#        server: 192.168.0.159
+#        path: /data/k8s/factory/platform-factory-project

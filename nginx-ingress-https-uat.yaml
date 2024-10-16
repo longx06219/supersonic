@@ -4,21 +4,21 @@ metadata:
   annotations:
     #kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: 2048M
-  name: mqtt-b001-cloud-wxxinsoft-nginx-ingress-https
+  name: supersonic-uat-nginx-ingress-https
 spec:
   ingressClassName: "nginx"
   rules: # 一个ingress可以配置多个rules
-  - host: b001.mqtt.wxxinsoft.cn # 域名配置，可以不写，匹配*,此域名就是浏览器里访问的URL
+  - host: uat.chatbi.wxxinsoft.cn # 域名配置，可以不写，匹配*,此域名就是浏览器里访问的URL
     http:
       paths: # 相当于nginx的location，同一个host可以配置多个path,此处我们写所有
       - backend:
           service:
-            name: xinsoft-mqtt-70-b001  # 代理到哪个svc，与上面创建的测试后端svc对应
+            name: supersonic-uat  # 代理到哪个svc，与上面创建的测试后端svc对应
             port:
-              number: 8081 # svc暴露出来的端口，与上面创建的测试后端svc对应
+              number: 9080 # svc暴露出来的端口，与上面创建的测试后端svc对应
         path: /
         pathType: Prefix
   tls:
     - hosts:
-      - b001.mqtt.wxxinsoft.cn
+      - uat.chatbi.wxxinsoft.cn
       secretName: www-wxxinsoft-tls

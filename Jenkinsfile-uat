@@ -33,6 +33,7 @@ timeout(time: 6000, unit: 'SECONDS') {
                 dir('.'){
 	                stage('Node阶段'){
 	                    container('node') {
+	                        sh "npm config set registry https://registry.npmmirror.com"
                             sh "sh assembly/bin/supersonic-build.sh webapp"
 	                    }
 	                }

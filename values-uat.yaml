@@ -41,9 +41,9 @@ service:
 mount:
   volumeMounts:
 #    - name: applogs
-#      mountPath: /app/logs/platform-factory-project
+#      mountPath: /app/logs/supersonic
   volumes:
 #    - name: applogs
 #      nfs:
 #        server: 192.168.0.159
-#        path: /data/k8s/factory/platform-factory-project
+#        path: /data/k8s/factory/supersonic

@@ -112,6 +112,7 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                            helmDeploy(init: false ,dry_run: true ,name: "${app_name}" ,namespace: "${namespace}" ,values: "${values}" ,image: "${image}" ,tag: "${tag}" , template: "${template}")
 	                            echo "Helm 执行正式部署"
 	                            helmDeploy(init: false ,dry_run: false ,name: "${app_name}" ,namespace: "${namespace}",values: "${values}" ,image: "${image}" ,tag: "${tag}" , template: "${template}")
+	                            sh "kubectl apply -f nginx-ingress-https-uat.yaml -n ${namespace}"
 	                        }
 	                    }
 	                }

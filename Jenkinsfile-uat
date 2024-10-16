@@ -31,6 +31,11 @@ timeout(time: 6000, unit: 'SECONDS') {
                     git branch: "dev-20241014" ,changelog: true , credentialsId: "8f3bd6ca-0be3-480e-89be-9e04d6ee3f50", url: "http://gitlab-webservice-default.gitlab:8181/xinsoft/platform-factory/supersonic.git"
                 }
                 dir('.'){
+	                stage('Node阶段'){
+	                    container('node') {
+                            sh "sh assembly/bin/supersonic-build.sh webapp"
+	                    }
+	                }
 	                stage('Maven阶段'){
 	                    container('maven') {
 	                        //这里引用上面设置的全局的 settings.xml 文件，根据其ID将其引入并创建该文件

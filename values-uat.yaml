@@ -33,10 +33,10 @@ service:
   annotations: {}
   ports: 
     - name: server
-      port: 30588
-      targetPort: 30588
+      port: 9080
+      targetPort: 9080
       protocol: TCP
-#      nodePort: 30588
+#      nodePort: 9080
 
 mount:
   volumeMounts:

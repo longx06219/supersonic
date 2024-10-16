@@ -21,6 +21,10 @@ const LoginPage: React.FC = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const encryptKey = CryptoJS.enc.Utf8.parse('supersonic@2024');
   const [form] = useForm();
+  form.setFieldsValue({
+    name: 'admin',
+    password: '123456',
+  })
   const { initialState = {}, setInitialState } = useModel('@@initialState');
   // 通过用户信息进行登录
   const loginDone = async (values: RegisterFormDetail) => {
@@ -96,7 +100,7 @@ const LoginPage: React.FC = () => {
                       color="#296DF3"
                       style={{ display: 'inline-block', marginTop: 8 }}
                     />
-                    <div>SuperSonic</div>
+                    <div>ChatBI</div>
                   </Space>
                 </h3>
                 <Item name="name" rules={[{ required: true }]} label="">

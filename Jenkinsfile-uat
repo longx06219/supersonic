@@ -28,9 +28,9 @@ timeout(time: 6000, unit: 'SECONDS') {
                 stage('Git阶段'){
                     echo "Git 阶段"
                     sh "git config --global http.sslVerify false"
-                    git branch: "main" ,changelog: true , credentialsId: "8f3bd6ca-0be3-480e-89be-9e04d6ee3f50", url: "http://gitlab-webservice-default.gitlab:8181/xinsoft/platform-factory/platform-factory.git"
+                    git branch: "dev-20241014" ,changelog: true , credentialsId: "8f3bd6ca-0be3-480e-89be-9e04d6ee3f50", url: "http://gitlab-webservice-default.gitlab:8181/xinsoft/platform-factory/supersonic.git"
                 }
-                dir('platform-factory-project'){
+                dir('.'){
 	                stage('Maven阶段'){
 	                    container('maven') {
 	                        //这里引用上面设置的全局的 settings.xml 文件，根据其ID将其引入并创建该文件
@@ -115,17 +115,17 @@ timeout(time: 6000, unit: 'SECONDS') {
     }catch(Exception e) {
         currentBuild.result = "FAILURE"
     }finally {
-        def jobName = 'platform-factory-project-uat_factory'
+        def jobName = 'supersonic-uat_factory'
         // 获取执行状态
         def currResult = currentBuild.result ?: 'SUCCESS' 
         // 判断执行任务状态，根据不同状态发送邮件
         stage('email'){
             if (currResult == 'SUCCESS') {
                 echo "发送成功邮件"
-                emailext(subject: jobName+'任务执行成功',to: 'g_factory@wxxinsoft.cn',body: jobName+'''任务已经成功构建完成...''')
+                emailext(subject: '任务执行成功',to: 'g_factory@wxxinsoft.cn',body: jobName+'''任务已经成功构建完成...''')
             }else {
                 echo "发送失败邮件"
-                emailext(subject: jobName+'任务执行失败',to: 'g_factory@wxxinsoft.cn',body: jobName+'''任务执行失败构建失败...''')
+                emailext(subject: '任务执行失败',to: 'g_factory@wxxinsoft.cn',body: jobName+'''任务执行失败构建失败...''')
             }
         }
     }

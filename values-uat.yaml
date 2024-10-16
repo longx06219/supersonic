@@ -10,8 +10,8 @@ resources:
     memory: 256Mi
     cpu: 10m
 
-nodeSelector:
-  kubernetes.io/hostname: k8s-node2
+#nodeSelector:
+#  kubernetes.io/hostname: k8s-node2
 
 #***java && app 环境变量设置
 env: 

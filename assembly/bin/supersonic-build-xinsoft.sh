@@ -67,6 +67,9 @@ function packageRelease {
 #1. build backend services
 if [ "$service" == "webapp" ]; then
   buildWebapp
+elif [ "$service" == "backend" ]; then
+  buildJavaService ${STANDALONE_SERVICE}
+  packageRelease ${STANDALONE_SERVICE}
 else
   buildJavaService $service
   buildWebapp

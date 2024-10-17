@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: platform-factory-web-uat
+  name: supersonic-uat
 spec:
   selector:
-    app: platform-factory-web-uat
+    app: supersonic-uat
   # type: ClusterIP
   type: NodePort
   ports:
@@ -16,20 +16,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: platform-factory-web-uat
+  name: supersonic-uat
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: platform-factory-web-uat
+      app: supersonic-uat
   template:
     metadata:
       labels:
-        app: platform-factory-web-uat
+        app: supersonic-uat
     spec:
       containers:
-      - name: platform-factory-web-uat
-        image: harbor.wxxinsoft.cn/library/platform-factory-web-uat:v1-1
+      - name: supersonic-uat
+        image: harbor.wxxinsoft.cn/library/supersonic-uat:v1-1
         # imagePullPolicy: IfNotPresent
         imagePullPolicy: Always
         lifecycle:

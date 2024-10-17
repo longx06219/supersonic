@@ -1,5 +1,6 @@
 # Use an official OpenJDK runtime as a parent image
-FROM openjdk:8-jdk
+#FROM openjdk:8-jdk
+FROM registry.cn-beijing.aliyuncs.com/caspe-prod/openjdk:java8supersonic
 
 # Set the working directory in the container
 WORKDIR /usr/src/app

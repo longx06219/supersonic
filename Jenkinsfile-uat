@@ -1,23 +1,3 @@
-// 执行Helm的方法
-def helmDeploy(Map args) {
-    if(args.init){
-        println "Helm 初始化"
-        // sh "helm init --client-only --stable-repo-url ${args.url}"
-        // sh "helm repo add stable ${args.url}"
-        // sh "helm repo add myrepo ${args.url}"
-        // sh "helm repo add cnieg ${args.url}"
-        sh "helm repo add mychart ${args.url} --insecure-skip-tls-verify=true"
-        sh "helm repo remove stable"
-        sh "helm repo ls"
-        sh "helm repo update"
-    } else if (args.dry_run) {
-        println "尝试 Helm 部署，验证是否能正常部署"
-        sh "helm upgrade --install ${args.name} --namespace ${args.namespace} ${args.values} --set ${args.image},${args.tag} mychart/${args.template} --dry-run --debug --insecure-skip-tls-verify=true"
-    } else {
-        println "正式 Helm 部署"
-        sh "helm upgrade --install ${args.name} --namespace ${args.namespace} ${args.values} --set ${args.image},${args.tag} mychart/${args.template} --insecure-skip-tls-verify=true"
-    }
-}
 
 // jenkins slave 执行流水线任务
 timeout(time: 6000, unit: 'SECONDS') {
@@ -91,29 +71,6 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                stage('Helm阶段'){
 	                    container('helm-kubectl') {
 	                        withKubeConfig([credentialsId: "8c8e114a-ba01-4cec-89cb-f3e90352139c",serverUrl: "https://kubernetes.default.svc.cluster.local"]) {
-	                            // 设置参数
-	                            // repo_url = "https://charts.helm.sh/stable"
-	                            // repo_url = "https://www.minh.org.cn/chartrepo/library"
-	                            // repo_url = "https://cnieg.github.io/helm-charts"
-	                            // repo_url = "https://gitlab.gitlab.minh.org.cn/chart/springboot-chart/raw/main"
-	                            repo_url = "http://gitlab-webservice-default.gitlab:8181/chart/springboot-chart/raw/main"
-	                            app_name = "${pom.artifactId}-uat"
-	                            namespace = "factory"
-	                            // 检测是否存在yaml文件
-	                            def values = ""
-	                            if (fileExists('values-uat.yaml')) {
-	                                values = "-f values-uat.yaml"
-	                            }
-	                            image = "image.repository=${hub}/${project_name}/${pom.artifactId}"
-	                            tag = "image.tag=${pom_version}"
-	                            template = "spring-boot"
-	                            // 执行 Helm 方法
-	                            echo "Helm 初始化"
-	                            helmDeploy(init: true ,url: "${repo_url}");
-	                            echo "Helm 执行部署测试"
-	                            helmDeploy(init: false ,dry_run: true ,name: "${app_name}" ,namespace: "${namespace}" ,values: "${values}" ,image: "${image}" ,tag: "${tag}" , template: "${template}")
-	                            echo "Helm 执行正式部署"
-	                            helmDeploy(init: false ,dry_run: false ,name: "${app_name}" ,namespace: "${namespace}",values: "${values}" ,image: "${image}" ,tag: "${tag}" , template: "${template}")
 	                            sh "kubectl apply -f nginx-ingress-https-uat.yaml -n ${namespace}"
 	                        }
 	                    }

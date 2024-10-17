@@ -29,13 +29,13 @@ spec:
     spec:
       containers:
       - name: supersonic-uat
-        image: harbor.wxxinsoft.cn/library/supersonic-uat:v1-1
+        image: harbor.wxxinsoft.cn/library/supersonic-uat:0.9.8-SNAPSHOT-1
         # imagePullPolicy: IfNotPresent
         imagePullPolicy: Always
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh","-c","cd /usr/share/nginx/html"]
+              command: ["/bin/sh","-c","cd /usr/src/app"]
         ports:
         - name: http
-          containerPort: 80
+          containerPort: 9080

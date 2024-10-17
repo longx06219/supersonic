@@ -68,7 +68,7 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                        }
 	                    }
 	                }
-	                stage('Helm阶段'){
+	                stage('K8S阶段'){
 	                    container('helm-kubectl') {
 	                        withKubeConfig([credentialsId: "8c8e114a-ba01-4cec-89cb-f3e90352139c",serverUrl: "https://kubernetes.default.svc.cluster.local"]) {
 	                            sh "kubectl apply -f nginx-ingress-https-uat.yaml -n ${namespace}"

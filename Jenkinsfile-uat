@@ -14,7 +14,8 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                stage('Node阶段'){
 	                    container('node') {
 	                        sh "npm config set registry https://registry.npmmirror.com"
-                            sh "sh assembly/bin/supersonic-build.sh webapp"
+                            // sh "sh assembly/bin/supersonic-build.sh webapp"
+                            sh "sh assembly/bin/supersonic-build-xinsoft.sh webapp"
 	                    }
 	                }
 	                stage('Maven阶段'){
@@ -22,7 +23,8 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                        //这里引用上面设置的全局的 settings.xml 文件，根据其ID将其引入并创建该文件
 	                        configFileProvider([configFile(fileId: "7eb2238d-0cfd-4b39-8c67-af1f32df18ca", targetLocation: "settings.xml")]){
 	                            // sh "mvn clean install -Dmaven.test.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --settings settings.xml"
-	                            sh "mvn clean install -DskipTests -Dspotless.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --settings settings.xml"
+	                            // sh "mvn clean install -DskipTests -Dspotless.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --settings settings.xml"
+	                            sh "sh assembly/bin/supersonic-build-xinsoft.sh backend"
 	                        }
 	                    }
 	                }

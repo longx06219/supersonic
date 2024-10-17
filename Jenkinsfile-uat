@@ -77,12 +77,6 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                            image = "${hub}/${project_name}/${image_name}"
 	                            tag = "${image_tag}"
 	                            // 执行 K8S 方法
-                                echo "创建configmap"
-                                if ("${BUILD_NUMBER}" > 1) {
-                                    sh "kubectl delete configmap platform-factory-web-config-prod -n ${namespace}"
-                                }
-                                sh "kubectl create configmap platform-factory-web-config-prod --from-file=nginx-prod.conf --from-file=conf.d/default-prod.conf -n ${namespace}"
-
 	                            echo "执行部署"
 	                            sh "kubectl apply -f deployment-prod.yaml -n ${namespace}"
 	                            sh "kubectl set image deployment ${app_name} ${image_name}=${image}:${tag} -n ${namespace}"

@@ -78,7 +78,7 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                            tag = "${image_tag}"
 	                            // 执行 K8S 方法
 	                            echo "执行部署"
-	                            sh "kubectl apply -f deployment-prod.yaml -n ${namespace}"
+	                            sh "kubectl apply -f deployment-uat.yaml -n ${namespace}"
 	                            sh "kubectl set image deployment ${app_name} ${image_name}=${image}:${tag} -n ${namespace}"
 	                            sh "kubectl apply -f nginx-ingress-https-uat.yaml -n ${namespace}"
 	                        }

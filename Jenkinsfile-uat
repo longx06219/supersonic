@@ -59,12 +59,12 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                        docker.withRegistry("http://${hub}", "4731c8a0-fb4e-471a-b2d3-2c709d15fccd") {
 	                            echo "构建镜像"
 	                            // 设置推送到minh仓库的library项目下，并用pom里面设置的项目名与版本号打标签
-	                            // def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}:${pom_version}")
-	                            def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}:${pom_version}", "-f Dockerfile-uat --no-cache --build-arg SUPERSONIC_VERSION=${pom_version} .")
+	                            // def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}-uat:${pom_version}")
+	                            def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}-uat:${pom_version}", "-f Dockerfile-uat --no-cache --build-arg SUPERSONIC_VERSION=${pom_version} .")
 	                            echo "推送镜像"
 	                            customImage.push()
 	                            echo "删除镜像"
-	                            sh "docker rmi ${hub}/${project_name}/${pom.artifactId}:${pom_version}" 
+	                            sh "docker rmi ${hub}/${project_name}/${pom.artifactId}-uat:${pom_version}"
 	                        }
 	                    }
 	                }
@@ -72,14 +72,14 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                    container('helm-kubectl') {
 	                        withKubeConfig([credentialsId: "8c8e114a-ba01-4cec-89cb-f3e90352139c",serverUrl: "https://kubernetes.default.svc.cluster.local"]) {
 	                            // 设置参数
-	                            app_name = "${image_name}"
+	                            app_name = "${pom.artifactId}-uat"
 	                            namespace = "factory"
-	                            image = "${hub}/${project_name}/${image_name}"
-	                            tag = "${image_tag}"
+	                            image = "${hub}/${project_name}/${pom.artifactId}-uat"
+	                            tag = "${pom_version}"
 	                            // 执行 K8S 方法
 	                            echo "执行部署"
 	                            sh "kubectl apply -f deployment-uat.yaml -n ${namespace}"
-	                            sh "kubectl set image deployment ${app_name} ${image_name}=${image}:${tag} -n ${namespace}"
+	                            sh "kubectl set image deployment ${app_name} ${pom.artifactId}-uat=${image}:${tag} -n ${namespace}"
 	                            sh "kubectl apply -f nginx-ingress-https-uat.yaml -n ${namespace}"
 	                        }
 	                    }

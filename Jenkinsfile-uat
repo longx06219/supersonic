@@ -79,7 +79,8 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                        docker.withRegistry("http://${hub}", "4731c8a0-fb4e-471a-b2d3-2c709d15fccd") {
 	                            echo "构建镜像"
 	                            // 设置推送到minh仓库的library项目下，并用pom里面设置的项目名与版本号打标签
-	                            def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}:${pom_version}")
+	                            // def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}:${pom_version}")
+	                            def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}:${pom_version}", "-f Dockerfile-uat --no-cache --build-arg SUPERSONIC_VERSION=${pom_version} .")
 	                            echo "推送镜像"
 	                            customImage.push()
 	                            echo "删除镜像"

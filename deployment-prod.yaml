@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: supersonic-uat
+  name: supersonic-prod
 spec:
   selector:
-    app: supersonic-uat
+    app: supersonic-prod
   type: ClusterIP
 #  type: NodePort
   ports:
@@ -16,20 +16,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: supersonic-uat
+  name: supersonic-prod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: supersonic-uat
+      app: supersonic-prod
   template:
     metadata:
       labels:
-        app: supersonic-uat
+        app: supersonic-prod
     spec:
       containers:
-      - name: supersonic-uat
-        image: harbor.wxxinsoft.cn/library/supersonic-uat:0.9.8-SNAPSHOT-1
+      - name: supersonic-prod
+        image: harbor.wxxinsoft.cn/library/supersonic-prod:0.9.8-SNAPSHOT-1
         # imagePullPolicy: IfNotPresent
         imagePullPolicy: Always
         lifecycle:

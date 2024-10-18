@@ -28,8 +28,10 @@ ARG SUPERSONIC_VERSION
 COPY assembly/build/supersonic-standalone-${SUPERSONIC_VERSION}.zip .
 
 # Unzip the supersonic standalone zip
-RUN unzip supersonic-standalone-${SUPERSONIC_VERSION}.zip && \
-    rm supersonic-standalone-${SUPERSONIC_VERSION}.zip
+#RUN unzip supersonic-standalone-${SUPERSONIC_VERSION}.zip && \
+#    rm supersonic-standalone-${SUPERSONIC_VERSION}.zip
+RUN tar -zxvf supersonic-standalone-${SUPERSONIC_VERSION}.tar.gz && \
+    rm supersonic-standalone-${SUPERSONIC_VERSION}.tar.gz
 
 # Create a symbolic link to the supersonic installation directory
 RUN ln -s /usr/src/app/supersonic-standalone-${SUPERSONIC_VERSION} /usr/src/app/supersonic-standalone-latest

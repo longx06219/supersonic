@@ -16,7 +16,7 @@ function buildJavaService {
   model_name=$1
   echo "starting building supersonic-${model_name} service"
 #  mvn -f $projectDir clean package -DskipTests -Dspotless.skip=true
-  mvn -f $projectDir clean package -DskipTests -Dspotless.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --settings settings.xml
+  mvn -f $projectDir clean install -DskipTests -Dspotless.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --settings settings.xml
   if [ $? -ne 0 ]; then
       echo "Failed to build backend Java modules."
       exit 1

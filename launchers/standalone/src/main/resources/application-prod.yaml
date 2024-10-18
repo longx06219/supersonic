@@ -7,8 +7,8 @@ spring:
 #    url: jdbc:mysql://wxxinsoft.gnway.org:10913/supersonic?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
 #    username: root
 #    password: 123456
-#    url: jdbc:mysql://192.168.0.176:55306/supersonic_uat?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
-    url: jdbc:mysql://192.168.0.176:55306/supersonic_uat?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
+#    url: jdbc:mysql://192.168.0.176:55306/supersonic?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://192.168.0.176:55306/supersonic?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
     username: xinsoft
     password: 'Xinsoft2024@db!'
     driver-class-name: com.mysql.jdbc.Driver

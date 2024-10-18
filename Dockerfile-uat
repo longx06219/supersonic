@@ -25,7 +25,8 @@ ARG SUPERSONIC_VERSION
 #RUN apt-get update && apt-get install -y dnsutils
 
 # Copy the supersonic standalone zip file into the container
-COPY assembly/build/supersonic-standalone-${SUPERSONIC_VERSION}.zip .
+#COPY assembly/build/supersonic-standalone-${SUPERSONIC_VERSION}.zip .
+COPY assembly/build/supersonic-standalone-${SUPERSONIC_VERSION}.tar.gz .
 
 # Unzip the supersonic standalone zip
 #RUN unzip supersonic-standalone-${SUPERSONIC_VERSION}.zip && \

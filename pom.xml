@@ -7,7 +7,7 @@
     <groupId>com.tencent.supersonic</groupId>
     <artifactId>supersonic</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}</version>
+    <version>0.9.8-SNAPSHOT</version>
 
     <modules>
         <module>auth</module>

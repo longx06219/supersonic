@@ -1,0 +1,112 @@
+
+// jenkins slave 执行流水线任务
+timeout(time: 6000, unit: 'SECONDS') {
+    try{
+        def label = "jnlp-agent"
+        podTemplate(label: label,cloud: 'kubernetes' ){
+            node (label) {
+                stage('Git阶段'){
+                    echo "Git 阶段"
+                    sh "git config --global http.sslVerify false"
+                    git branch: "dev-20241014" ,changelog: true , credentialsId: "8f3bd6ca-0be3-480e-89be-9e04d6ee3f50", url: "http://gitlab-webservice-default.gitlab:8181/xinsoft/platform-factory/supersonic.git"
+                }
+                dir('.'){
+	                stage('Node阶段'){
+	                    container('node') {
+	                        sh "npm config set registry https://registry.npmmirror.com"
+                            // sh "sh assembly/bin/supersonic-build.sh webapp"
+                            sh "sh assembly/bin/supersonic-build-xinsoft.sh webapp"
+	                    }
+	                }
+	                stage('Maven阶段'){
+	                    container('maven') {
+	                        //这里引用上面设置的全局的 settings.xml 文件，根据其ID将其引入并创建该文件
+	                        configFileProvider([configFile(fileId: "7eb2238d-0cfd-4b39-8c67-af1f32df18ca", targetLocation: "settings.xml")]){
+	                            // sh "mvn clean install -Dmaven.test.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --settings settings.xml"
+	                            // sh "mvn clean install -DskipTests -Dspotless.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --settings settings.xml"
+	                            sh "sh assembly/bin/supersonic-build-xinsoft.sh backend"
+	                        }
+	                    }
+	                }
+	                stage('Docker阶段'){
+	                    echo "Docker 阶段"
+	                    container('docker') {
+	                        // 读取pom参数
+	                        echo "读取 pom.xml 参数"
+	                        pom = readMavenPom file: './pom.xml'
+	                        // 设置镜像仓库地址
+	                        // d8ce3931-2d7c-4408-bb77-bd2c4aab2e16
+	                        // hub = "www.minh.org.cn"
+	                        // 59526b69-b484-4a72-84c7-42261b2c6d64
+	                        // hub = "docker.io"
+	                        // 52090ccb-2abb-4963-9fbe-cf3f3473c29e
+	                        // hub = "registry.cn-beijing.aliyuncs.com"
+	                        // 4731c8a0-fb4e-471a-b2d3-2c709d15fccd
+	                        // hub = "harbor.minh.org.cn"
+	                        hub = "harbor.wxxinsoft.cn"
+	                        // hub = "harbor-portal.harbor"
+	                        // 设置仓库项目名
+	                        // project_name = "library"
+	                        // project_name = "minhxpzn"
+	                        // project_name = "caspe-uat"
+	                        project_name = "library"
+	                        // pom_version = pom.version
+	                        supersonic_version = "0.9.8-SNAPSHOT"
+	                        pom_version = supersonic_version
+	                        echo pom_version
+	                        if (pom_version == "" || pom_version == null) {
+	                            pom_version = "1.0.0-SNAPSHOT"
+	                        }
+	                        pom_version = pom_version + "-" + "${BUILD_NUMBER}"
+	                        echo "${pom_version}"
+	                        echo "编译 Docker 镜像"
+	                        docker.withRegistry("http://${hub}", "4731c8a0-fb4e-471a-b2d3-2c709d15fccd") {
+	                            echo "构建镜像"
+	                            // 设置推送到minh仓库的library项目下，并用pom里面设置的项目名与版本号打标签
+	                            // def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}-uat:${pom_version}")
+	                            def customImage = docker.build("${hub}/${project_name}/${pom.artifactId}-uat:${pom_version}", "-f Dockerfile-uat --no-cache --build-arg SUPERSONIC_VERSION=${supersonic_version} .")
+	                            echo "推送镜像"
+	                            customImage.push()
+	                            echo "删除镜像"
+	                            sh "docker rmi ${hub}/${project_name}/${pom.artifactId}-uat:${pom_version}"
+	                        }
+	                    }
+	                }
+	                stage('K8S阶段'){
+	                    container('helm-kubectl') {
+	                        withKubeConfig([credentialsId: "8c8e114a-ba01-4cec-89cb-f3e90352139c",serverUrl: "https://kubernetes.default.svc.cluster.local"]) {
+	                            // 设置参数
+	                            app_name = "${pom.artifactId}-uat"
+	                            namespace = "factory"
+	                            image = "${hub}/${project_name}/${pom.artifactId}-uat"
+	                            tag = "${pom_version}"
+	                            // 执行 K8S 方法
+	                            echo "执行部署"
+	                            sh "kubectl apply -f deployment-uat.yaml -n ${namespace}"
+	                            sh "kubectl set image deployment ${app_name} ${pom.artifactId}-uat=${image}:${tag} -n ${namespace}"
+	                            sh "kubectl apply -f nginx-ingress-https-uat.yaml -n ${namespace}"
+	                        }
+	                    }
+	                }
+                }
+            }
+        }
+    }catch(Exception e) {
+        currentBuild.result = "FAILURE"
+    }finally {
+        def jobName = 'supersonic-uat_factory'
+        // 获取执行状态
+        def currResult = currentBuild.result ?: 'SUCCESS' 
+        // 判断执行任务状态，根据不同状态发送邮件
+        stage('email'){
+            if (currResult == 'SUCCESS') {
+                echo "发送成功邮件"
+                emailext(subject: '任务执行成功',to: 'g_factory@wxxinsoft.cn',body: jobName+'''任务已经成功构建完成...''')
+            }else {
+                echo "发送失败邮件"
+                emailext(subject: '任务执行失败',to: 'g_factory@wxxinsoft.cn',body: jobName+'''任务执行失败构建失败...''')
+            }
+        }
+    }
+}
+

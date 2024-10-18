@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: supersonic-uat
+spec:
+  selector:
+    app: supersonic-uat
+  type: ClusterIP
+#  type: NodePort
+  ports:
+  - name: http
+#    nodePort: 9080
+    port: 9080
+    targetPort: 9080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: supersonic-uat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supersonic-uat
+  template:
+    metadata:
+      labels:
+        app: supersonic-uat
+    spec:
+      containers:
+      - name: supersonic-uat
+        image: harbor.wxxinsoft.cn/library/supersonic-uat:0.9.8-SNAPSHOT-1
+        # imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh","-c","cd /usr/src/app"]
+        ports:
+        - name: http
+          containerPort: 9080

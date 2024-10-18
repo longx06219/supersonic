@@ -15,7 +15,7 @@ timeout(time: 6000, unit: 'SECONDS') {
 	                    container('node') {
 	                        sh "npm config set registry https://registry.npmmirror.com"
                             // sh "sh assembly/bin/supersonic-build.sh webapp"
-                            sh "sh assembly/bin/supersonic-build-xinsoft.sh webapp"
+                            // sh "sh assembly/bin/supersonic-build-xinsoft.sh webapp"
 	                    }
 	                }
 	                stage('Maven阶段'){

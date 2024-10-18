@@ -46,7 +46,8 @@ function packageRelease {
   echo "starting packaging supersonic release"
   cd $buildDir
   [ -d "$release_dir" ] && rm -rf "$release_dir"
-  [ -f "$release_dir.zip" ] && rm -f "$release_dir.zip"
+#  [ -f "$release_dir.zip" ] && rm -f "$release_dir.zip"
+  [ -f "$release_dir.tar.gz" ] && rm -f "$release_dir.tar.gz"
   mkdir $release_dir
   # package webapp
   tar xvf supersonic-webapp.tar.gz
@@ -58,7 +59,8 @@ function packageRelease {
   tar xvf $service_name-bin.tar.gz
   mv $service_name/* $release_dir/
   # generate zip file
-  zip -r $release_dir.zip $release_dir
+#  zip -r $release_dir.zip $release_dir
+  tar -zcvf $release_dir.tar.gz $release_dir
   # delete intermediate files
   rm supersonic-webapp.tar.gz $service_name-bin.tar.gz
   rm -rf webapp $service_name $release_dir

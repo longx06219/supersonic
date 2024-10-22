@@ -20,3 +20,7 @@ spring:
     console:
       path: /h2-console/semantic
       enabled: true
+s2:
+  authentication:
+    token:
+      appSecret: supersonic:WIaO9YRRVt+7QtpPvyWsARFngnEcbaKBk783uGFwMrbJBaochsqCH62L4Kijcb0sZCYoSsiKGV/zPml5MnZ3uQ==,factory:com.xinsoft.platform.platform-factory

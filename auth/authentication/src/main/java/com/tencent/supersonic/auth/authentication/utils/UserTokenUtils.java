@@ -112,7 +112,7 @@ public class UserTokenUtils {
         return getClaims(token, appKey);
     }
 
-    private Optional<Claims> getClaims(String token, String appKey) {
+    public Optional<Claims> getClaims(String token, String appKey) {
         try {
             String tokenSecret = getTokenSecret(appKey);
             Claims claims =
@@ -120,6 +120,7 @@ public class UserTokenUtils {
                             .build().parseClaimsJws(getTokenString(token)).getBody();
             return Optional.of(claims);
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             log.info("can not getClaims from appKey:{} token:{}, please login", appKey, token);
         }
         return Optional.empty();

@@ -22,5 +22,7 @@ spring:
       enabled: true
 s2:
   authentication:
+    exclude:
+      path: /api/auth/user/register,/api/auth/user/login,/api/auth/sso
     token:
       appSecret: supersonic:WIaO9YRRVt+7QtpPvyWsARFngnEcbaKBk783uGFwMrbJBaochsqCH62L4Kijcb0sZCYoSsiKGV/zPml5MnZ3uQ==,factory:com.xinsoft.platform.platform-factory

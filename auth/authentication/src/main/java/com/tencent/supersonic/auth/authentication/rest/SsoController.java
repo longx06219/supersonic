@@ -64,7 +64,7 @@ public class SsoController {
         if (ObjectUtils.isEmpty(list)) {
             String name = loginAlias;
             String displayName = userRealname;
-            String password = "Xinsoft@1";
+            String password = "Q8TwLHvwhhAQ3Fc4mnmQTA==";// Xinsoft@1
 
             UserReq userCmd = new UserReq();
             userCmd.setName(name);

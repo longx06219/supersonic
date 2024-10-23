@@ -27,3 +27,10 @@ export function postUserLogin(data: any): Promise<any> {
     data,
   });
 }
+
+export function postSSOLogin(data: any): Promise<any> {
+  return request(`${process.env.AUTH_API_BASE_URL}/sso`, {
+    method: 'POST',
+    data,
+  });
+}

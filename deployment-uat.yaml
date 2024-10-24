@@ -39,3 +39,11 @@ spec:
         ports:
         - name: http
           containerPort: 9080
+        volumeMounts:
+          - name: dictionary-custom
+            mountPath: /usr/src/app/supersonic-standalone-0.9.8-SNAPSHOT/conf/data/dictionary/custom
+      volumes:
+        - name: dictionary-custom
+          nfs:
+            server: 192.168.0.159
+            path: /data/k8s/factory/supersonic-uat/conf/data/dictionary/custom

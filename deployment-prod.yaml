@@ -42,6 +42,8 @@ spec:
         volumeMounts:
           - name: dictionary-custom
             mountPath: /usr/src/app/supersonic-standalone-0.9.8-SNAPSHOT/conf/data/dictionary/custom
+      nodeSelector:
+        kubernetes.io/hostname: k8s-node3
       volumes:
         - name: dictionary-custom
           nfs:

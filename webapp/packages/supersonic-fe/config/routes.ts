@@ -115,12 +115,12 @@ const ROUTES = [
       },
     ],
   },
-
   {
     path: '/tag',
     name: 'tag',
     component: './SemanticModel/Insights',
     envEnableList: [ENV_KEY.SEMANTIC],
+    hideInMenu: process.env.SHOW_TAG ? false : true,
     routes: [
       {
         path: '/tag',
@@ -169,11 +169,7 @@ const ROUTES = [
   },
   {
     path: '/',
-    redirect: APP_TARGET === 'inner' ? '/model' : '/chat',
-    envRedirect: {
-      [ENV_KEY.CHAT]: '/chat',
-      [ENV_KEY.SEMANTIC]: '/model',
-    },
+    redirect: '/model',
   },
   {
     path: '/401',

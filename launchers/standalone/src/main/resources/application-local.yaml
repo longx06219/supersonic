@@ -14,8 +14,8 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   sql:
     init:
-      schema-locations: classpath:db/schema-h2.sql
-      data-locations: classpath:db/data-h2.sql
+      schema-locations: classpath:db/schema-h2.sql,classpath:db/schema-h2-demo.sql
+      data-locations: classpath:db/data-h2.sql,classpath:db/data-h2-demo.sql
   h2:
     console:
       path: /h2-console/semantic

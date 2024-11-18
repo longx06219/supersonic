@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class PlainTextExecutor implements ChatQueryExecutor {
 
     public static final String APP_KEY = "SMALL_TALK";
-    private static final String INSTRUCTION = "" + "#Role: You are a nice person to talk to."
+    private static final String INSTRUCTION = "#Role: You are a nice person to talk to."
             + "\n#Task: Respond quickly and nicely to the user."
             + "\n#Rules: 1.ALWAYS use the same language as the `#Current Input`."
             + "\n#History Inputs: %s" + "\n#Current Input: %s" + "\n#Response: ";
@@ -50,7 +50,7 @@ public class PlainTextExecutor implements ChatQueryExecutor {
         }
 
         String promptStr = String.format(chatApp.getPrompt(), getHistoryInputs(executeContext),
-                executeContext.getQueryText());
+                executeContext.getRequest().getQueryText());
         Prompt prompt = PromptTemplate.from(promptStr).apply(Collections.EMPTY_MAP);
         ChatLanguageModel chatLanguageModel =
                 ModelProvider.getChatModel(chatApp.getChatModelConfig());
@@ -66,8 +66,8 @@ public class PlainTextExecutor implements ChatQueryExecutor {
 
     private String getHistoryInputs(ExecuteContext executeContext) {
         StringBuilder historyInput = new StringBuilder();
-        List<QueryResp> queryResps = getHistoryQueries(executeContext.getChatId(), 5);
-        queryResps.stream().forEach(p -> {
+        List<QueryResp> queryResps = getHistoryQueries(executeContext.getRequest().getChatId(), 5);
+        queryResps.forEach(p -> {
             historyInput.append(p.getQueryText());
             historyInput.append(";");
 

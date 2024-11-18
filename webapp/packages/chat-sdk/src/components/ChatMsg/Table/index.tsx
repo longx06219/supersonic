@@ -1,4 +1,8 @@
-import { formatByDecimalPlaces, getFormattedValue } from '../../../utils/utils';
+import {
+  formatByDecimalPlaces,
+  getFormattedValue,
+  formatByThousandSeperator,
+} from '../../../utils/utils';
 import { Table as AntTable } from 'antd';
 import { MsgDataType } from '../../../common/type';
 import { CLS_PREFIX } from '../../../common/constants';
@@ -9,21 +13,28 @@ import moment from 'moment';
 type Props = {
   data: MsgDataType;
   size?: SizeType;
+  question: string;
   loading?: boolean;
   onApplyAuth?: (model: string) => void;
 };
 
-const Table: React.FC<Props> = ({ data, size, loading, onApplyAuth }) => {
+const Table: React.FC<Props> = ({ data, size, loading, question, onApplyAuth }) => {
   const { entityInfo, queryColumns, queryResults } = data;
 
   const prefixCls = `${CLS_PREFIX}-table`;
-
   const tableColumns: any[] = queryColumns.map(
     ({ name, nameEn, showType, dataFormatType, dataFormat, authorized }) => {
       return {
         dataIndex: nameEn,
         key: nameEn,
         title: name || nameEn,
+        defaultSortOrder: 'descend',
+        sorter:
+          showType === 'NUMBER'
+            ? (a, b) => {
+                return a[nameEn] - b[nameEn];
+              }
+            : undefined,
         render: (value: string | number) => {
           if (!authorized) {
             return (
@@ -47,7 +58,8 @@ const Table: React.FC<Props> = ({ data, size, loading, onApplyAuth }) => {
           if (showType === 'NUMBER') {
             return (
               <div className={`${prefixCls}-formatted-value`}>
-                {getFormattedValue(value as number)}
+                {/* {getFormattedValue(value as number)} */}
+                {formatByThousandSeperator(value)}
               </div>
             );
           }
@@ -72,9 +84,11 @@ const Table: React.FC<Props> = ({ data, size, loading, onApplyAuth }) => {
   const dataSource = dateColumn
     ? queryResults.sort((a, b) => moment(a[dateColumn.nameEn]).diff(moment(b[dateColumn.nameEn])))
     : queryResults;
-
   return (
     <div className={prefixCls}>
+      <div className={`${prefixCls}-top-bar`}>
+        <div className={`${prefixCls}-indicator-name`}>{question}</div>
+      </div>
       <AntTable
         pagination={
           queryResults.length <= 10 ? false : { defaultPageSize: 10, position: ['bottomCenter'] }

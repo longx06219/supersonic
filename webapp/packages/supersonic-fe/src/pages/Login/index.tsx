@@ -9,10 +9,10 @@ import S2Icon, { ICON } from '@/components/S2Icon';
 import React, { useState } from 'react';
 import { useForm } from 'antd/lib/form/Form';
 import type { RegisterFormDetail } from './components/types';
-import { postUserLogin, userRegister, postSSOLogin } from './services';
+import { postUserLogin, userRegister } from './services';
 import { AUTH_TOKEN_KEY } from '@/common/constants';
 import { queryCurrentUser } from '@/services/user';
-import { history, useModel, useLocation } from 'umi';
+import { history, useModel } from '@umijs/max';
 import CryptoJS from 'crypto-js';
 import { encryptPassword } from '@/utils/utils';
 
@@ -21,43 +21,6 @@ const LoginPage: React.FC = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const encryptKey = CryptoJS.enc.Utf8.parse('supersonic@2024');
   const [form] = useForm();
-
-  // SSO-
-  const { search } = useLocation();
-  let parmas = new URLSearchParams(search);
-  if (parmas.get('token')) {
-    const ssoToken = parmas.get('token')
-    postSSOLogin({ ssoToken: ssoToken }).then(async res => {
-      console.log(res)
-      if (res.code == 200) {
-        localStorage.setItem(AUTH_TOKEN_KEY, res.data);
-        const { code: queryUserCode, data: queryUserData } = await queryCurrentUser();
-        if (queryUserCode === 200) {
-          const currentUser = {
-            ...queryUserData,
-            staffName: queryUserData.staffName || queryUserData.name,
-          };
-          const authCodes = Array.isArray(initialState?.authCodes) ? initialState?.authCodes : [];
-          if (queryUserData.superAdmin) {
-            authCodes.push(ROUTE_AUTH_CODES.SYSTEM_ADMIN);
-          }
-          setInitialState({ ...initialState, currentUser, authCodes });
-        }
-        history.push('/');
-        return;
-      } else {
-        message.error(res.msg);
-      }
-    });
-  } else {
-    form.setFieldsValue({
-      name: 'admin',
-      password: '123456',
-    })
-  }
-  // SSO-
-
-
   const { initialState = {}, setInitialState } = useModel('@@initialState');
   // 通过用户信息进行登录
   const loginDone = async (values: RegisterFormDetail) => {
@@ -127,23 +90,23 @@ const LoginPage: React.FC = () => {
               <div className={styles.loginMain}>
                 <h3 className={styles.title}>
                   <Space>
-                    {/* <S2Icon
+                    <S2Icon
                       icon={ICON.iconlogobiaoshi}
                       size={30}
                       color="#296DF3"
                       style={{ display: 'inline-block', marginTop: 8 }}
-                    /> */}
-                    <div>芯软云 ChatBI</div>
+                    />
+                    <div>SuperSonic</div>
                   </Space>
                 </h3>
                 <Item name="name" rules={[{ required: true }]} label="">
-                  <Input size="large" placeholder="用户名" prefix={<UserOutlined />} />
+                  <Input size="large" placeholder="用户名: admin" prefix={<UserOutlined />} />
                 </Item>
                 <Item name="password" rules={[{ required: true }]} label="">
                   <Input
                     size="large"
                     type="password"
-                    placeholder="密码"
+                    placeholder="密码: 123456"
                     onPressEnter={handleLogin}
                     prefix={<LockOutlined />}
                   />
@@ -154,9 +117,9 @@ const LoginPage: React.FC = () => {
                 </Button>
 
                 <div className={styles.tool}>
-                  {/* <Button className={styles.button} onClick={handleRegisterBtn}>
+                  <Button className={styles.button} onClick={handleRegisterBtn}>
                     注册
-                  </Button> */}
+                  </Button>
                   {/* <Button className={styles.button} type="link" onClick={handleForgetPwdBtn}>
               忘记密码
             </Button> */}

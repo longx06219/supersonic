@@ -90,6 +90,12 @@ export function updateDimension(data: any): Promise<any> {
   });
 }
 
+export function updateDimensionAliasValue(data: any): Promise<any> {
+  return request.post(`${process.env.API_BASE_URL}dimension/updateDimension/alias/value`, {
+    data,
+  });
+}
+
 export function mockDimensionAlias(data: any): Promise<any> {
   return request.post(`${process.env.API_BASE_URL}dimension/mockDimensionAlias`, {
     data,
@@ -446,6 +452,9 @@ export function getUnAvailableItem(data: any): Promise<any> {
 }
 
 export function getModelDetail(data: any): Promise<any> {
+  if (!data.modelId) {
+    return;
+  }
   return request.get(`${process.env.API_BASE_URL}model/getModel/${data.modelId}`);
 }
 

@@ -10,7 +10,6 @@ import com.tencent.supersonic.headless.api.pojo.SemanticParseInfo;
 import com.tencent.supersonic.headless.api.pojo.SemanticSchema;
 import com.tencent.supersonic.headless.chat.ChatQueryContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.util.CollectionUtils;
 
@@ -31,7 +30,8 @@ public abstract class BaseSemanticCorrector implements SemanticCorrector {
 
     public void correct(ChatQueryContext chatQueryContext, SemanticParseInfo semanticParseInfo) {
         try {
-            if (StringUtils.isBlank(semanticParseInfo.getSqlInfo().getCorrectedS2SQL())) {
+            String s2SQL = semanticParseInfo.getSqlInfo().getCorrectedS2SQL();
+            if (Objects.isNull(s2SQL)) {
                 return;
             }
             doCorrect(chatQueryContext, semanticParseInfo);
